@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог мебели - Premier Design</title>
+    <meta name="description" content="Каталог мебели на заказ от Premier Design. Диваны, кровати, шкафы и другоя мебель для вашего дома в Астане.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Animation Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --terracotta: #C4704A;
+            --warm-white: #FAFAFA;
+            --charcoal: #2C2C2C;
+            --soft-beige: #F5F2ED;
+            --light-gray: #E8E8E8;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #FFFFFF 0%, #FAFAFA 100%);
+            color: var(--charcoal);
+        }
+        
+        .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, var(--terracotta) 0%, var(--charcoal) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px) rotateX(5deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary {
+            background: var(--terracotta);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: #B85D3E;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(196, 112, 74, 0.3);
+        }
+        
+        .filter-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn.active {
+            background: var(--terracotta);
+            color: white;
+        }
+        
+        .filter-btn:not(.active) {
+            background: white;
+            color: var(--charcoal);
+            border: 2px solid var(--light-gray);
+        }
+        
+        .filter-btn:not(.active):hover {
+            border-color: var(--terracotta);
+            color: var(--terracotta);
+        }
+        
+        .product-card {
+            opacity: 1;
+            transform: scale(1);
+            transition: all 0.5s ease;
+        }
+        
+        .product-card.hidden {
+            opacity: 0;
+            transform: scale(0.8);
+            pointer-events: none;
+        }
+        
+        .nav-blur {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .reveal-element {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .reveal-element.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .floating-element {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 nav-blur border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <h1 class="font-display text-2xl font-bold text-gradient">Premier Design</h1>
+                </div>
+                
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="index.html" class="text-gray-700 hover:text-terracotta px-3 py-2 text-sm font-medium transition-colors">ГЛАВНАЯ</a>
+                        <a href="catalog.html" class="text-gray-900 hover:text-terracotta px-3 py-2 text-sm font-medium transition-colors">КАТАЛОГ</a>
+                        <a href="index.html#about" class="text-gray-700 hover:text-terracotta px-3 py-2 text-sm font-medium transition-colors">О НАС</a>
+                        <a href="index.html#contacts" class="text-gray-700 hover:text-terracotta px-3 py-2 text-sm font-medium transition-colors">КОНТАКТЫ</a>
+                    </div>
+                </div>
+                
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-terracotta">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t border-gray-100">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-base font-medium text-gray-700">ГЛАВНАЯ</a>
+                <a href="catalog.html" class="block px-3 py-2 text-base font-medium text-gray-900">КАТАЛОГ</a>
+                <a href="index.html#about" class="block px-3 py-2 text-base font-medium text-gray-700">О НАС</a>
+                <a href="index.html#contacts" class="block px-3 py-2 text-base font-medium text-gray-700">КОНТАКТЫ</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="pt-24 pb-12 bg-soft-beige">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="reveal-element">
+                <h1 class="font-display text-5xl md:text-6xl font-bold text-gradient mb-4">
+                    КАТАЛОГ МЕБЕЛИ
+                </h1>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Идеальное решение для вашего дома. Производство под ваши размеры и дизайн.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filter Section -->
+    <section class="py-8 bg-white border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-wrap justify-center gap-4">
+                <button class="filter-btn active px-6 py-3 rounded-full font-semibold" data-filter="all">
+                    ВСЕ
+                </button>
+                <button class="filter-btn px-6 py-3 rounded-full font-semibold" data-filter="sofas">
+                    ДИВАНЫ
+                </button>
+                <button class="filter-btn px-6 py-3 rounded-full font-semibold" data-filter="beds">
+                    КРОВАТИ
+                </button>
+                <button class="filter-btn px-6 py-3 rounded-full font-semibold" data-filter="chairs">
+                    КРЕСЛА
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Grid -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="products-grid">
+                
+                <!-- Product 1 - Sofa -->
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="sofas">
+                    <img src="divanes\1.jpg" alt="Модульный диван Комфорт Плюс" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Диван «Монте»</h3>
+                        <p class="text-gray-600 mb-4">Компактный и стильный прямой диван, который подойдет для небольших помещений. Обивка из фактурной серой ткани и закругленные края подушек дарят ощущение мягкости и уюта.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Диван «Монте»')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="sofas">
+                    <img src="divanes\2.jpg" alt="Диван Угловой" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Диван «Лаунж»</h3>
+                        <p class="text-gray-600 mb-4">Современный диван с низкой посадкой и удобной оттоманкой, обтянутый износостойкой тканью. Дизайн с тонкими металлическими ножками придает модели легкость.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Диван «Лаунж»')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="sofas">
+                    <img src="divanes\5.JPG" alt="Диван Люкс" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Модульный Диван «Элегия»</h3>
+                        <p class="text-gray-600 mb-4">Уютный угловой диван с мягкими подушками и широкой оттоманкой. Светлая велюровая обивка создает ощущение воздушности. Идеален для комфортного отдыха и современных гостиных.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Модульный Диван «Элегия»')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="sofas">
+                    <img src="divanes\6.jpg" alt="Диван Люкс" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Диван «Скандинавия»</h3>
+                        <p class="text-gray-600 mb-4">Функциональный угловой диван с плотной тканевой обивкой насыщенного синего цвета. Модель отличается четкими формами и высокой износостойкостью, идеально подходит для активного использования.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Диван «Скандинавия»')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="sofas">
+                    <img src="divanes\7.jpg" alt="Диван Люкс" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Прямой Диван «Лофт»</h3>
+                        <p class="text-gray-600 mb-4">Длинный трехместный диван с лаконичным дизайном и минимальными подлокотниками. Идеален для офисов, кабинетов или библиотек. Модель легко зонирует пространство, не перегружая его.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Прямой Диван «Лофт»')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="sofas">
+                    <img src="divanes\9.JPG" alt="Диван Люкс" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Диван «Малахит»</h3>
+                        <p class="text-gray-600 mb-4">Глубокий зеленый оттенок и бархатистая ткань делают эту модель настоящим акцентом. Модульная конструкция на тонких черных опорах сочетает роскошь и минимализм.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Диван «Малахит»')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="sofas">
+                    <img src="divanes\12.JPG" alt="Диван Люкс" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Модульный Диван «Комфорт XL»</h3>
+                        <p class="text-gray-600 mb-4">Ультракомфортная модель с глубокой посадкой и массивным основанием. Состоит из отдельных блоков, которые можно менять. Идеален для большой семьи и любителей максимального релакса.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Модульный Диван «Комфорт XL»')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="sofas">
+                    <img src="divanes\17.JPG" alt="Диван Люкс" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Диван «Малахит»</h3>
+                        <p class="text-gray-600 mb-4">Глубокий зеленый оттенок и бархатистая ткань делают эту модель настоящим акцентом. Модульная конструкция на тонких черных опорах сочетает роскошь и минимализм.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Диван «Малахит»')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="sofas">
+                    <img src="divanes\18.JPG" alt="Диван Люкс" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Модульный Диван «Вельвет»</h3>
+                        <p class="text-gray-600 mb-4">Просторный секционный диван-шезлонг в теплом тауповом цвете (под замшу). Модель с глубокой посадкой, широкими сиденьями и спинкой, стоит на светлом ковре.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Модульный Диван «Вельвет»')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="sofas">
+                    <img src="divanes\22.JPG" alt="Диван Люкс" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Диван «Грейс»</h3>
+                        <p class="text-gray-600 mb-4">Угловой диван с выраженной серой текстурой и объемными подушками спинки. Имеет удлиненную секцию-шезлонг и стоит на тонких черных ножках.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Диван «Грейс»')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="sofas">
+                    <img src="divanes\23.JPG" alt="Диван Люкс" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Диван «Техно»</h3>
+                        <p class="text-gray-600 mb-4">Угловой диван-шезлонг в серой текстурной ткани. Имеет прямые, четкие линии, черные металлические ножки и три мягкие подушки спинки. Подходит для современного минимализма.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Диван «Техно»')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="sofas">
+                    <img src="divanes\24.JPG" alt="Диван Люкс" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Диван «Манхэттен»</h3>
+                        <p class="text-gray-600 mb-4">Вместительный светло-серый угловой диван-шезлонг. Имеет большие, мягкие подушки спинки и слегка скошенные подлокотники. Расположен на ковре с узором.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Диван «Манхэттен»')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="sofas">
+                    <img src="divanes\25.jpg" alt="Диван Люкс" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Диван «Комфорт»</h3>
+                        <p class="text-gray-600 mb-4">Уютный угловой диван-шезлонг в кремовой обивке. Низкие подлокотники и пухлые подушки создают ощущение комфорта. Минималистичный стиль на темном паркете.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Диван «Комфорт»')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="sofas">
+                    <img src="divanes\30.JPG" alt="Диван Люкс" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Модульный Диван «Кристалл»</h3>
+                        <p class="text-gray-600 mb-4">Элегантный белый угловой диван-шезлонг с низкой посадкой и тонкими черными ножками. Украшен подушками с черным кантом. Идеален для современного светлого интерьера.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Модульный Диван «Кристалл»')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="sofas">
+                    <img src="divanes\32.jpg" alt="Модульный Диван «Айс»" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Модульный Диван «Айс»</h3>
+                        <p class="text-gray-600 mb-4">Современный угловой диван в очень светлой, фактурной обивке. Характеризуется строгими кубическими формами, прямыми подлокотниками и тонкими черными ножками.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Модульный Диван «Айс»')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="sofas">
+                    <img src="divanes\33.jpg" alt="Диван Люкс" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Диван «Бриз»</h3>
+                        <p class="text-gray-600 mb-4">Угловой диван в теплом бежевом оттенке. Модель с высокой, прямой спинкой, широкими подлокотниками и декоративными подушками. Находится в комнате с темным деревянным полом.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Диван «Бриз»')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="sofas">
+                    <img src="divanes\34.jpg" alt="Диван Люкс" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Диван «Сканди»</h3>
+                        <p class="text-gray-600 mb-4">Лаконичный диван-шезлонг в нейтральном светло-бежевом оттенке. Отличается узкими подлокотниками, тремя подушками спинки и тонкими черными ножками.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Диван «Сканди»')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="sofas">
+                    <img src="divanes\35.jpg" alt="Диван Люкс" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Диван «Аура»</h3>
+                        <p class="text-gray-600 mb-4">Угловой диван в теплом бежевом оттенке. Ракурс показывает широкие, прямые подлокотники и высокую спинку с большими подушками. Диван расположен на фоне темного деревянного пола, создавая контраст.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Диван «Аура»')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="sofas">
+                    <img src="divanes\36.jpg" alt="Диван Люкс" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Набор «Соло» (Угловой Диван и Диван-Двойка)</h3>
+                        <p class="text-gray-600 mb-4">Комплект мебели в едином светло-бежевом стиле: большой угловой диван-шезлонг и диван-двойка. Модели имеют четкие прямые формы, мягкие подушки спинки и установлены на тонких черных ножках.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Набор «Соло» (Угловой Диван и Диван-Двойка)')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="sofas">
+                    <img src="divanes\37.jpg" alt="Диван Люкс" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Диван «Кокон»</h3>
+                        <p class="text-gray-600 mb-4">Трехместный диван оригинальной округлой формы, обит серо-коричневой текстурной тканью. Отсутствие видимых ножек и мягкие, скругленные боковины создают уютный, обволакивающий вид.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Диван «Кокон»')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="sofas">
+                    <img src="divanes\40.jpg" alt="Диван Люкс" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Кушетка «Арлекин» (Детская)</h3>
+                        <p class="text-gray-600 mb-4">Односпальная кушетка (тахта) в бежевой обивке с яркими синими подлокотниками. Задний фон украшен цветными стеновыми панелями (оранжевый, синий), что указывает на молодежный или детский стиль.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Кушетка «Арлекин» (Детская)')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="sofas">
+                    <img src="divanes\43.jpg" alt="Диван Люкс" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Модульный Диван «Флоу»</h3>
+                        <p class="text-gray-600 mb-4">Очень длинный модульный диван в светлой, фактурной обивке. Модель отличается широкими, массивными подлокотниками с вертикальным рубчиком (рифлением) и минималистичными прямыми формами.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Модульный Диван «Флоу»')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>  
+                    </div>
+                </div>
+
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="sofas">
+                    <img src="divanes\45.JPG" alt="Диван Люкс" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Модульный Диван «Панорама»</h3>
+                        <p class="text-gray-600 mb-4">Внушительный модульный диван в светло-серой обивке, состоящий из шести секций. Имеет два шезлонга (слева — пуф, справа — угловая секция). Отличается простотой и масштабом, стоит на тонких черных ножках.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Модульный Диван «Панорама»')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Product 2 - Bed -->
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="beds">
+                    <img src="divanes\кровать.jpg" alt="Кровать Терракота" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Кровать «Классик»</h3>
+                        <p class="text-gray-600 mb-4">Двуспальная кровать с мягким высоким изголовьем и царгами в светло-кремовой обивке. Изголовье имеет закругленные углы и дополняется прикроватными тумбами с акцентным декором.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Кровать «Классик»')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="beds">
+                    <img src="divanes\кровать2.jpg" alt="Кровать Роял" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Кровать «Терракот»</h3>
+                        <p class="text-gray-600 mb-4">Стильная двуспальная кровать с текстильной обивкой насыщенного терракотового (кирпично-красного) цвета. Изголовье высокое, мягкое, с наклонными подушками. Модель имеет низкую посадку и тонкие ножки.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Кровать «Терракот»')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Product 4 - Chair -->
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="chairs">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.modernfurnishings.com/de959a8c25003eeb83ad2c0510fa16945c8f900e.jpg" alt="Кресло Премиум" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Кресло «Премиум»</h3>
+                        <p class="text-gray-600 mb-4">Роскошное кресло с эргономичной спинкой и мягкими подлокотниками. Идеально для домашнего офиса или зоны отдыха.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-terracotta font-semibold">от 120,000 ₸</span>
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Кресло Премиум')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 8 - Chair -->
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="chairs">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.caffelattehome.com/7ab1072a6de0195a79e0055a163077597843a322.jpg" alt="Кресло Модерн" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Кресло «Модерн»</h3>
+                        <p class="text-gray-600 mb-4">Современное кресло с геометрическим дизайном и комфортной посадкой. Отличное дополнение к современному интерьеру.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-terracotta font-semibold">от 95,000 ₸</span>
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Кресло Модерн')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 12 - Chair -->
+                <div class="product-card card-hover bg-white rounded-2xl overflow-hidden shadow-lg reveal-element" data-category="chairs">
+                    <img src="https://kimi-web-img.moonshot.cn/img/m.media-amazon.com/8522a2166d2b3856b33e7073e8759c2e66b4d08d.jpg" alt="Кресло Офисное" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-display text-xl font-semibold mb-2">Офисное Кресло «Бизнес»</h3>
+                        <p class="text-gray-600 mb-4">Эргономичное офисное кресло с поддержкой спины и регулируемой высотой. Идеально для рабочего пространства.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-terracotta font-semibold">от 85,000 ₸</span>
+                            <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold" onclick="openWhatsApp('Офисное Кресло Бизнес')">
+                                ЗАКАЗАТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-soft-beige">
+        <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+            <div class="reveal-element">
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                    Создадим мебель, о которой вы мечтали
+                </h2>
+                <p class="text-xl text-gray-600 mb-8">
+                    Закажите индивидуальный расчет и бесплатную консультацию дизайнера
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="https://wa.me/77078816898" target="_blank" class="btn-primary px-8 py-4 rounded-lg text-lg font-semibold">
+                        ОБСУДИТЬ ПРОЕКТ
+                    </a>
+                    <a href="tel:+77078816898" class="bg-gray-100 text-gray-700 hover:bg-gray-200 px-8 py-4 rounded-lg text-lg font-semibold transition-colors">
+                        ПОЗВОНИТЬ
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-charcoal text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="font-display text-2xl font-bold mb-4">Premier Design</h3>
+                    <p class="text-gray-300 mb-4">Создаем мебель мечты для вашего дома</p>
+                    <div class="flex space-x-4">
+                        <a href="https://www.instagram.com/premier_design_kz" target="_blank" class="text-gray-300 hover:text-white transition-colors">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987 6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.895 3.708 13.744 3.708 12.447s.49-2.448 1.418-3.323c.875-.875 2.026-1.297 3.323-1.297s2.448.422 3.323 1.297c.928.875 1.418 2.026 1.418 3.323s-.49 2.448-1.418 3.244c-.875.807-2.026 1.297-3.323 1.297zm7.83-1.297c-.875.807-2.026 1.297-3.323 1.297s-2.448-.49-3.323-1.297c-.928-.796-1.418-1.944-1.418-3.244s.49-2.448 1.418-3.323c.875-.875 2.026-1.297 3.323-1.297s2.448.422 3.323 1.297c.928.875 1.418 2.026 1.418 3.323s-.49 2.448-1.418 3.244z"/>
+                            </svg>
+                        </a>
+                        <a href="https://wa.me/77078816898" target="_blank" class="text-gray-300 hover:text-white transition-colors">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-display text-lg font-semibold mb-4">Контакты</h4>
+                    <div class="space-y-2 text-gray-300">
+                        <p>📞 +7 707 881 6898</p>
+                        <p>📍 Астана, Казахстан</p>
+                        <p>📧 info@premierdesign.kz</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-display text-lg font-semibold mb-4">Режим работы</h4>
+                    <div class="space-y-2 text-gray-300">
+                        <p>Пн-Пт: 9:00 - 19:00</p>
+                        <p>Сб: 10:00 - 17:00</p>
+                        <p>Вс: Выходной</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
+                <p>&copy; 2024 Premier Design. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premier Design - Мебель на заказ в Астане</title>
+    <meta name="description" content="Premier Design - создание мебели на заказ в Астане. Диваны, кровати, шкафы и дизайн интерьера под ключ. Собственное производство.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Animation Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --terracotta: #C4704A;
+            --warm-white: #FAFAFA;
+            --charcoal: #2C2C2C;
+            --soft-beige: #F5F2ED;
+            --light-gray: #E8E8E8;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #FFFFFF 0%, #FAFAFA 100%);
+            color: var(--charcoal);
+        }
+        
+        .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, rgba(196, 112, 74, 0.1) 0%, rgba(250, 250, 250, 0.9) 100%);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, var(--terracotta) 0%, var(--charcoal) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px) rotateX(5deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary {
+            background: var(--terracotta);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: #B85D3E;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(196, 112, 74, 0.3);
+        }
+        
+        .reveal-element {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .reveal-element.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .floating-element {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .nav-blur {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .hero-image {
+            object-fit: cover;
+            object-position: center;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-text {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 nav-blur border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <h1 class="font-display text-2xl font-bold text-gradient">Premier Design</h1>
+                </div>
+                
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="index.html" class="text-gray-900 hover:text-terracotta px-3 py-2 text-sm font-medium transition-colors">ГЛАВНАЯ</a>
+                        <a href="catalog.html" class="text-gray-700 hover:text-terracotta px-3 py-2 text-sm font-medium transition-colors">КАТАЛОГ</a>
+                        <a href="#about" class="text-gray-700 hover:text-terracotta px-3 py-2 text-sm font-medium transition-colors">О НАС</a>
+                        <a href="#contacts" class="text-gray-700 hover:text-terracotta px-3 py-2 text-sm font-medium transition-colors">КОНТАКТЫ</a>
+                    </div>
+                </div>
+                
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-terracotta">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t border-gray-100">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-base font-medium text-gray-900">ГЛАВНАЯ</a>
+                <a href="catalog.html" class="block px-3 py-2 text-base font-medium text-gray-700">КАТАЛОГ</a>
+                <a href="#about" class="block px-3 py-2 text-base font-medium text-gray-700">О НАС</a>
+                <a href="#contacts" class="block px-3 py-2 text-base font-medium text-gray-700">КОНТАКТЫ</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="resources/hero-sofa.png" alt="Modern custom sofa" class="w-full h-full hero-image">
+            <div class="absolute inset-0 hero-gradient"></div>
+        </div>
+        
+        <div class="relative z-10 max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8 pt-16">
+            <h1 class="font-display text-6xl md:text-8xl font-bold text-gradient mb-6 hero-text reveal-element">
+                PREMIER DESIGN
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-700 mb-8 max-w-2xl mx-auto reveal-element">
+                Создаем пространство под ключ. Мебель собственного производства в Астане.
+            </p>
+            <div class="reveal-element">
+                <a href="catalog.html" class="btn-primary inline-block px-8 py-4 rounded-lg text-lg font-semibold">
+                    СМОТРЕТЬ КАТАЛОГ
+                </a>
+            </div>
+        </div>
+        
+        <!-- Floating decorative elements -->
+        <div class="absolute top-20 left-10 w-20 h-20 bg-terracotta opacity-10 rounded-full floating-element"></div>
+        <div class="absolute bottom-20 right-10 w-32 h-32 bg-terracotta opacity-5 rounded-full floating-element" style="animation-delay: -2s;"></div>
+    </section>
+
+    <!-- Advantages Section -->
+    <section id="about" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-element">
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                    МЕБЕЛЬ, СОЗДАННАЯ ДЛЯ ВАШЕГО КОМФОРТА
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Мы объединяем современные технологии с традиционным мастерством для создания уникальной мебели
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="card-hover bg-soft-beige p-8 rounded-2xl text-center reveal-element">
+                    <div class="w-16 h-16 bg-terracotta rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Собственное Производство</h3>
+                    <p class="text-gray-600">Контроль качества на каждом этапе создания мебели</p>
+                </div>
+                
+                <div class="card-hover bg-soft-beige p-8 rounded-2xl text-center reveal-element">
+                    <div class="w-16 h-16 bg-terracotta rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Дизайн и Визуализация</h3>
+                    <p class="text-gray-600">Разработка индивидуальных дизайн-проектов интерьера</p>
+                </div>
+                
+                <div class="card-hover bg-soft-beige p-8 rounded-2xl text-center reveal-element">
+                    <div class="w-16 h-16 bg-terracotta rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Комплексный Подход</h3>
+                    <p class="text-gray-600">От чертежей и планировки до готового пространства под ключ</p>
+                </div>
+                
+                <div class="card-hover bg-soft-beige p-8 rounded-2xl text-center reveal-element">
+                    <div class="w-16 h-16 bg-terracotta rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Надежность</h3>
+                    <p class="text-gray-600">Работаем только с проверенными материалами</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="py-20 bg-soft-beige">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-element">
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                    ЧТО МЫ ДЕЛАЕМ
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Полный спектр услуг по созданию идеального интерьера
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                <div class="reveal-element">
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover">
+                        <img src="https://kimi-web-img.moonshot.cn/img/www.digsdigs.com/107e8d675312bbd5dfc290a3a92c7927d60f7fa3.jpg" alt="Custom furniture" class="w-full h-64 object-cover">
+                        <div class="p-8">
+                            <h3 class="font-display text-2xl font-semibold mb-4">МЕБЕЛЬ НА ЗАКАЗ</h3>
+                            <p class="text-gray-600 mb-6">Диваны, кровати, шкафы и другие предметы интерьера, созданные специально для вашего пространства</p>
+                            <ul class="space-y-2 text-sm text-gray-500">
+                                <li>• Индивидуальные размеры</li>
+                                <li>• Выбор материалов и тканей</li>
+                                <li>• Гарантия качества</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reveal-element">
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover">
+                        <img src="https://kimi-web-img.moonshot.cn/img/rinaldifurniture.co.uk/c5f4060c22ef352fe0c250ea6f37fd6e7361118d.jpg" alt="Interior design" class="w-full h-64 object-cover">
+                        <div class="p-8">
+                            <h3 class="font-display text-2xl font-semibold mb-4">ДИЗАЙН ИНТЕРЬЕРА</h3>
+                            <p class="text-gray-600 mb-6">Разработка концепции и 3D-визуализация вашего будущего интерьера</p>
+                            <ul class="space-y-2 text-sm text-gray-500">
+                                <li>• 3D визуализация проекта</li>
+                                <li>• Подбор материалов</li>
+                                <li>• Планировка пространства</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reveal-element">
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover">
+                        <img src="resources/workshop.png" alt="Workshop" class="w-full h-64 object-cover">
+                        <div class="p-8">
+                            <h3 class="font-display text-2xl font-semibold mb-4">РЕМОНТ И ОТДЕЛКА</h3>
+                            <p class="text-gray-600 mb-6">Реализация проектов любой сложности - от косметического ремонта до полной перепланировки</p>
+                            <ul class="space-y-2 text-sm text-gray-500">
+                                <li>• Полный цикл работ</li>
+                                <li>• Профессиональные бригады</li>
+                                <li>• Контроль сроков и качества</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+            <div class="reveal-element">
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                    Готовы создать свой идеальный интерьер?
+                </h2>
+                <p class="text-xl text-gray-600 mb-8">
+                    Свяжитесь с нами для бесплатной консультации и расчета стоимости вашего проекта
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="catalog.html" class="btn-primary px-8 py-4 rounded-lg text-lg font-semibold">
+                        ПОСМОТРЕТЬ КАТАЛОГ
+                    </a>
+                    <a href="https://wa.me/77078816898" target="_blank" class="bg-gray-100 text-gray-700 hover:bg-gray-200 px-8 py-4 rounded-lg text-lg font-semibold transition-colors">
+                        НАПИСАТЬ В WHATSAPP
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contacts" class="bg-charcoal text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="font-display text-2xl font-bold mb-4">Premier Design</h3>
+                    <p class="text-gray-300 mb-4">Создаем мебель мечты для вашего дома</p>
+                    <div class="flex space-x-4">
+                        <a href="https://www.instagram.com/premier_design_kz" target="_blank" class="text-gray-300 hover:text-white transition-colors">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987 6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.895 3.708 13.744 3.708 12.447s.49-2.448 1.418-3.323c.875-.875 2.026-1.297 3.323-1.297s2.448.422 3.323 1.297c.928.875 1.418 2.026 1.418 3.323s-.49 2.448-1.418 3.244c-.875.807-2.026 1.297-3.323 1.297zm7.83-1.297c-.875.807-2.026 1.297-3.323 1.297s-2.448-.49-3.323-1.297c-.928-.796-1.418-1.944-1.418-3.244s.49-2.448 1.418-3.323c.875-.875 2.026-1.297 3.323-1.297s2.448.422 3.323 1.297c.928.875 1.418 2.026 1.418 3.323s-.49 2.448-1.418 3.244z"/>
+                            </svg>
+                        </a>
+                        <a href="https://wa.me/77078816898" target="_blank" class="text-gray-300 hover:text-white transition-colors">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-display text-lg font-semibold mb-4">Контакты</h4>
+                    <div class="space-y-2 text-gray-300">
+                        <p>📞 +7 707 881 6898</p>
+                        <p>📍 Астана, Казахстан</p>
+                        <p>📧 info@premierdesign.kz</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-display text-lg font-semibold mb-4">Режим работы</h4>
+                    <div class="space-y-2 text-gray-300">
+                        <p>Пн-Пт: 9:00 - 19:00</p>
+                        <p>Сб: 10:00 - 17:00</p>
+                        <p>Вс: Выходной</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
+                <p>&copy; 2024 Premier Design. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
