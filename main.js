@@ -35,26 +35,20 @@ document.addEventListener('DOMContentLoaded', function() {
         const splideElement = document.querySelector('.splide');
         if (splideElement && typeof Splide !== 'undefined') {
             new Splide(splideElement, {
-                type: 'loop',
-                perPage: 3,
-                gap: '2rem',
-                autoplay: true,
-                interval: 5000,
-                pauseOnHover: true,
-                lazyLoad: 'nearby',
-                breakpoints: {
-                    1024: { // lg
-                        perPage: 2,
-                        gap: '1rem',
-                    },
-                    640: { // sm
-                        perPage: 1,
-                        gap: '1rem',
-                    }
-                }
-            }).mount();
-        }
+            type: 'loop',
+            perPage: 3,
+            gap: '2rem',
+            autoplay: true,
+            interval: 5000,
+            pauseOnHover: true,
+            // Удалено lazyLoad, чтобы изображения подгружались сразу
+            breakpoints: {
+                1024: { perPage: 2, gap: '1rem' },
+                640: { perPage: 1, gap: '1rem' }
+            }
+        }).mount();
     }
+}
 
     // Contact Form Submission Handler
     function initContactForm() {
